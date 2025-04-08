@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ILD分级预测工具</title>
+    <style>
+        body { font-family: "Microsoft YaHei", Arial, sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { padding: 5px; width: 250px; }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .error { color: red; margin-top: 10px; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-left: 5px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <h1>ILD分级预测工具</h1>
+    <form method="POST">
+        <!-- 新增ALT和血沉独立输入 -->
+        <div class="form-group">
+            <label>ALT (U/L):</label>
+            <input type="number" step="0.1" name="alt"
+                   value="{{ form_data.ALT if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>血沉 (mm/h):</label>
+            <input type="number" step="0.1" name="erythrocyte_sedimentation"
+                   value="{{ form_data.血沉 if form_data else '' }}" required>
+        </div>
+
+        <!-- 其他原有输入保持不变 -->
+        <div class="form-group">
+            <label>白蛋白 (g/L):</label>
+            <input type="number" step="0.1" name="albumin"
+                   value="{{ form_data.白蛋白 if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>抗合成酶抗体阳性 (0/1):</label>
+            <input type="number" name="antibody" min="0" max="1"
+                   value="{{ form_data.抗合成酶抗体阳性 if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>血红蛋白 (g/L):</label>
+            <input type="number" step="1" name="hemoglobin"
+                   value="{{ form_data.血红蛋白 if form_data else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label>甘油三酯 (mmol/L):</label>
+            <input type="number" step="0.01" name="triglyceride"
+                   value="{{ form_data.甘油三酯 if form_data else '' }}" required>
+        </div>
+        <button type="submit">预测</button>
+    </form>
+
+    <!-- 错误提示 -->
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <!-- 结果展示 -->
+    {% if result %}
+    <div class="result">
+        <h3>预测结果</h3>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>
